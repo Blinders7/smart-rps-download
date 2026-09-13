@@ -130,12 +130,28 @@
             background: linear-gradient(90deg, #3b82f6, #fbbf24, #8b5cf6);
         }
 
+        /* Universal Protection: Prevent image selection, saving, drag, and mobile long-press menus */
+        img {
+            -webkit-touch-callout: none !important;
+            -webkit-user-select: none !important;
+            -khtml-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-user-drag: none !important;
+            user-drag: none !important;
+            pointer-events: none !important;
+        }
+
         /* School Logo Container */
         .logo-wrap {
             position: relative;
             width: 100px;
             height: 100px;
             margin: 0 auto 18px;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
         }
         .logo-glow {
             position: absolute;
@@ -145,6 +161,7 @@
             filter: blur(14px);
             opacity: 0.8;
             animation: pulseGlow 3s infinite alternate;
+            pointer-events: none;
         }
         @keyframes pulseGlow {
             0% { opacity: 0.5; transform: scale(0.96); }
@@ -161,6 +178,26 @@
             border: 2px solid rgba(255, 255, 255, 0.9);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
             display: block;
+            -webkit-touch-callout: none !important;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-user-drag: none !important;
+            user-drag: none !important;
+            pointer-events: none !important;
+        }
+        /* Transparent Shield Layer to block all mobile long-press gestures & right-clicks */
+        .logo-shield {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            z-index: 10;
+            background: transparent;
+            cursor: default;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
         }
 
         /* Typography */
@@ -770,9 +807,10 @@
             <div class="glass-card" style="text-align: center;">
                 
                 <!-- School Official Crest / Logo -->
-                <div class="logo-wrap">
+                <div class="logo-wrap" oncontextmenu="return false;">
                     <div class="logo-glow"></div>
-                    <img src="school_logo.png" alt="R.P.S. International School Logo" class="logo-img" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%233b82f6\'><path d=\'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5\'/></svg>'">
+                    <img src="school_logo.png" alt="R.P.S. International School Logo" class="logo-img" draggable="false" oncontextmenu="return false;" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%233b82f6\'><path d=\'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5\'/></svg>'">
+                    <div class="logo-shield" oncontextmenu="return false;"></div>
                 </div>
 
                 <!-- Header Titles -->
@@ -953,7 +991,7 @@
                         <div class="mockup-box">
                             <div class="mockup-installer">
                                 <div class="mockup-installer-left">
-                                    <img src="school_logo.png" style="width: 26px; height: 26px; border-radius: 6px;" alt="Icon">
+                                    <img src="school_logo.png" style="width: 26px; height: 26px; border-radius: 6px; pointer-events: none; -webkit-touch-callout: none; -webkit-user-drag: none;" alt="Icon" draggable="false" oncontextmenu="return false;">
                                     <div>
                                         <div class="mockup-installer-app">Smart RPS</div>
                                         <div class="mockup-installer-sub">Do you want to install this application?</div>
@@ -1079,6 +1117,21 @@
                 isDownloading = false;
             }, 6500);
         }
+
+        // Prevent right-click / context menu, long-press save popup, and dragging on all images
+        document.addEventListener('contextmenu', (e) => {
+            if (e.target.tagName === 'IMG' || e.target.closest('.logo-wrap') || e.target.classList.contains('logo-shield')) {
+                e.preventDefault();
+                return false;
+            }
+        }, { passive: false });
+
+        document.addEventListener('dragstart', (e) => {
+            if (e.target.tagName === 'IMG' || e.target.closest('.logo-wrap') || e.target.classList.contains('logo-shield')) {
+                e.preventDefault();
+                return false;
+            }
+        });
 
         // Initialize Telemetry on page load
         window.addEventListener('DOMContentLoaded', () => {
