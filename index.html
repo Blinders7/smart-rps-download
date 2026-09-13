@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart RPS - Download Mobile App</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233b82f6'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
         body {
@@ -20,6 +21,7 @@
             width: 100%;
             background: rgba(30, 41, 59, 0.85);
             backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 24px;
             padding: 36px 24px;
@@ -45,10 +47,29 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 14px;
             padding: 14px;
-            margin-bottom: 22px;
+            margin-bottom: 18px;
             font-size: 13px;
             color: #10b981;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #10b981;
+            box-shadow: 0 0 10px #10b981;
+            display: inline-block;
+            animation: pulse 1.8s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.4; transform: scale(0.9); }
+            50% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: 0.4; transform: scale(0.9); }
         }
         .btn-dl {
             display: block;
@@ -62,9 +83,29 @@
             border-radius: 14px;
             box-shadow: 0 10px 24px rgba(37, 99, 235, 0.35);
             transition: all 0.2s;
-            margin-bottom: 22px;
+            margin-bottom: 20px;
         }
         .btn-dl:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(37, 99, 235, 0.5); }
+        .release-notes {
+            text-align: left;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-bottom: 20px;
+            font-size: 11.5px;
+            color: #cbd5e1;
+            line-height: 1.5;
+            display: none;
+        }
+        .release-notes-title {
+            font-weight: 700;
+            color: #fbbf24;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 0.5px;
+        }
         .guide {
             text-align: left;
             background: rgba(255, 255, 255, 0.04);
@@ -87,9 +128,17 @@
         <h1>Smart RPS Mobile App</h1>
         <p class="sub">Official School Portal (Android APK)</p>
 
-        <div class="status-badge" id="status">Connecting to cloud server...</div>
+        <div class="status-badge" id="status">
+            <span class="status-dot"></span>
+            <span id="status-text">Connecting to cloud server...</span>
+        </div>
 
-        <a href="#" id="dl-btn" class="btn-dl" style="display:none;">Download APK (v1.1.20)</a>
+        <a href="#" id="dl-btn" class="btn-dl" style="display:none;">Download APK (v1.1.41)</a>
+
+        <div class="release-notes" id="release-notes-container">
+            <div class="release-notes-title">What's New</div>
+            <div id="release-notes-text"></div>
+        </div>
 
         <div class="guide">
             <b>Installation Steps:</b>
@@ -103,31 +152,71 @@
 
     <script>
         const GIST_URL = 'https://gist.githubusercontent.com/Blinders7/2796c813b75aeb01a662670a69e268df/raw?t=' + Date.now();
-        const FALLBACK_URL = 'https://sides-ice-cars-newark.trycloudflare.com';
+        const FALLBACK_URL = 'https://rich-could-created-vii.trycloudflare.com';
+        const DEFAULT_VERSION = '1.1.41';
+        const DEFAULT_SIZE = '34.9 MB';
 
-        function startDownload(baseUrl) {
-            const clean = baseUrl.trim().replace(/\/$/, '');
-            const dl = clean + '/download/app.apk';
-            document.getElementById('status').innerHTML = '&#10003; Server Online (v1.1.20)';
+        async function initDownloadPortal() {
+            let activeBaseUrl = FALLBACK_URL;
+
+            try {
+                const gistRes = await fetch(GIST_URL);
+                if (gistRes.ok) {
+                    const txt = (await gistRes.text()).trim();
+                    if (txt.startsWith('http://') || txt.startsWith('https://')) {
+                        activeBaseUrl = txt;
+                    }
+                }
+            } catch (e) {
+                console.warn('Using fallback tunnel URL:', e);
+            }
+
+            const cleanBase = activeBaseUrl.trim().replace(/\/$/, '');
+            let verName = DEFAULT_VERSION;
+            let fileSize = DEFAULT_SIZE;
+            let downloadUrl = cleanBase + '/download/app.apk';
+            let notes = '';
+
+            try {
+                const verRes = await fetch(cleanBase + '/api/app/version', { mode: 'cors' });
+                if (verRes.ok) {
+                    const data = await verRes.json();
+                    if (data.latest_version_name) verName = data.latest_version_name;
+                    if (data.file_size) fileSize = data.file_size;
+                    if (data.download_url) downloadUrl = data.download_url;
+                    if (data.release_notes) notes = data.release_notes;
+                }
+            } catch (e) {
+                console.warn('Error fetching live version from server API, using defaults:', e);
+            }
+
+            // Update Status Badge
+            const statusText = document.getElementById('status-text');
+            statusText.innerHTML = `Server Online (v${verName}) &bull; ${fileSize}`;
+            const statusBadge = document.getElementById('status');
+            statusBadge.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+
+            // Update Download Button
             const btn = document.getElementById('dl-btn');
-            btn.href = dl;
+            btn.innerHTML = `Download APK (v${verName})`;
+            btn.href = downloadUrl;
             btn.style.display = 'block';
-            setTimeout(() => { window.location.href = dl; }, 700);
+
+            // Show release notes if available
+            if (notes && notes.trim().length > 0) {
+                const notesContainer = document.getElementById('release-notes-container');
+                const notesText = document.getElementById('release-notes-text');
+                notesText.textContent = notes.replace(/^•\s*/, '');
+                notesContainer.style.display = 'block';
+            }
+
+            // Automatically trigger download after brief confirmation
+            setTimeout(() => {
+                window.location.href = downloadUrl;
+            }, 900);
         }
 
-        fetch(GIST_URL)
-            .then(r => r.text())
-            .then(txt => {
-                const u = txt.trim();
-                if (u.startsWith('http://') || u.startsWith('https://')) {
-                    startDownload(u);
-                } else {
-                    startDownload(FALLBACK_URL);
-                }
-            })
-            .catch(() => {
-                startDownload(FALLBACK_URL);
-            });
+        initDownloadPortal();
     </script>
 </body>
 </html>
