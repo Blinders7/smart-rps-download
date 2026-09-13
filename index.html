@@ -3,220 +3,761 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart RPS - Download Mobile App</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233b82f6'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+    <title>Smart RPS Mobile Portal | R.P.S. International School</title>
+    <link rel="icon" type="image/png" href="school_logo.png">
+    <meta name="description" content="Official Smart RPS Mobile Application for Students, Teachers and Administration of R.P.S. International School.">
+    <meta name="theme-color" content="#0f172a">
+
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        :root {
+            --primary: #3b82f6;
+            --primary-gradient: linear-gradient(135deg, #2563eb 0%, #4f46e5 50%, #7c3aed 100%);
+            --accent-gold: #fbbf24;
+            --gold-gradient: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            --bg-dark: #090d16;
+            --card-bg: rgba(18, 25, 43, 0.88);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --success: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
-            color: #f8fafc;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(124, 58, 237, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.05) 0%, transparent 50%),
+                linear-gradient(180deg, #090d16 0%, #0c1220 100%);
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 24px 16px;
+            padding: 32px 16px;
+            position: relative;
+            overflow-x: hidden;
         }
-        .card {
-            max-width: 440px;
+
+        /* Ambient Glowing Background Orbs */
+        .ambient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatOrb 12s ease-in-out infinite alternate;
+        }
+        .orb-1 {
+            width: 320px;
+            height: 320px;
+            background: rgba(37, 99, 235, 0.25);
+            top: -60px;
+            left: -60px;
+        }
+        .orb-2 {
+            width: 350px;
+            height: 350px;
+            background: rgba(124, 58, 237, 0.22);
+            bottom: -60px;
+            right: -60px;
+            animation-duration: 15s;
+        }
+
+        @keyframes floatOrb {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, 40px) scale(1.08); }
+            100% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+
+        .container {
+            max-width: 480px;
             width: 100%;
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 24px;
-            padding: 36px 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Main Glass Card */
+        .main-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 28px;
+            padding: 36px 26px;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 30px rgba(59, 130, 246, 0.12);
+            position: relative;
+            overflow: hidden;
         }
-        .icon {
-            width: 72px;
-            height: 72px;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            border-radius: 18px;
-            margin: 0 auto 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+
+        /* Subtle Top Card Accent Bar */
+        .main-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #fbbf24, #8b5cf6);
         }
-        .icon svg { fill: white; width: 38px; height: 38px; }
-        h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
-        .sub { font-size: 14px; color: #94a3b8; margin-bottom: 24px; line-height: 1.4; }
-        .status-badge {
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 14px;
-            padding: 14px;
-            margin-bottom: 18px;
+
+        /* School Logo Container */
+        .logo-wrap {
+            position: relative;
+            width: 96px;
+            height: 96px;
+            margin: 0 auto 18px;
+        }
+        .logo-glow {
+            position: absolute;
+            inset: -4px;
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.5), rgba(59, 130, 246, 0.5));
+            border-radius: 50%;
+            filter: blur(12px);
+            opacity: 0.75;
+            animation: pulseGlow 3s infinite alternate;
+        }
+        @keyframes pulseGlow {
+            0% { opacity: 0.5; transform: scale(0.96); }
+            100% { opacity: 0.9; transform: scale(1.05); }
+        }
+        .logo-img {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+            background: #ffffff;
+            padding: 4px;
+            border: 2px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            display: block;
+        }
+
+        /* Typography */
+        .school-title {
             font-size: 13px;
-            color: #10b981;
-            font-weight: 600;
+            font-weight: 800;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
+            display: inline-block;
+        }
+
+        .portal-name {
+            font-size: 24px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+        }
+
+        .portal-sub {
+            font-size: 13.5px;
+            color: var(--text-sub);
+            line-height: 1.45;
+            margin-bottom: 22px;
+        }
+
+        /* Server Telemetry Badge */
+        .telemetry-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            background: rgba(12, 18, 34, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 12px 8px;
+            margin-bottom: 22px;
+        }
+        .tele-item {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            transition: all 0.3s ease;
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .tele-item:last-child {
+            border-right: none;
+        }
+        .tele-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #64748b;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+        .tele-val {
+            font-size: 13px;
+            font-weight: 700;
+            color: #f1f5f9;
+        }
+        .status-online {
+            color: var(--success);
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
         .status-dot {
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
-            background-color: #10b981;
-            box-shadow: 0 0 10px #10b981;
-            display: inline-block;
-            animation: pulse 1.8s infinite;
+            background-color: var(--success);
+            box-shadow: 0 0 8px var(--success);
+            animation: beacon 1.8s infinite;
         }
-        @keyframes pulse {
-            0% { opacity: 0.4; transform: scale(0.9); }
+        @keyframes beacon {
+            0%, 100% { opacity: 0.4; transform: scale(0.9); }
             50% { opacity: 1; transform: scale(1.2); }
-            100% { opacity: 0.4; transform: scale(0.9); }
         }
-        .btn-dl {
-            display: block;
+
+        /* Download Button CTA */
+        .btn-download-wrap {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .btn-download {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
             width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
-            color: white;
+            padding: 18px 24px;
+            background: var(--primary-gradient);
+            color: #ffffff;
+            font-size: 16.5px;
             font-weight: 700;
-            font-size: 16px;
             text-decoration: none;
-            border-radius: 14px;
-            box-shadow: 0 10px 24px rgba(37, 99, 235, 0.35);
-            transition: all 0.2s;
-            margin-bottom: 20px;
+            border-radius: 16px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.4);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
-        .btn-dl:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(37, 99, 235, 0.5); }
-        .release-notes {
-            text-align: left;
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 12px;
-            padding: 12px 14px;
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 36px rgba(37, 99, 235, 0.55);
+        }
+        .btn-download:active {
+            transform: translateY(1px);
+        }
+        /* Button Shimmer Sweep */
+        .btn-download::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 40%;
+            height: 200%;
+            background: linear-gradient(
+                60deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.25) 50%,
+                transparent 100%
+            );
+            transform: rotate(25deg);
+            animation: shine 4s infinite;
+        }
+        @keyframes shine {
+            0% { left: -60%; }
+            20% { left: 140%; }
+            100% { left: 140%; }
+        }
+
+        .btn-download svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+            flex-shrink: 0;
+            animation: floatDown 2s infinite ease-in-out;
+        }
+        @keyframes floatDown {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(3px); }
+        }
+
+        .btn-download.loading {
+            pointer-events: none;
+            opacity: 0.9;
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            box-shadow: 0 12px 30px rgba(16, 185, 129, 0.4);
+        }
+
+        .download-hint {
+            font-size: 11.5px;
+            color: #64748b;
+            margin-top: -10px;
+            margin-bottom: 22px;
+        }
+
+        /* Download Active Alert Notification (Appears on click) */
+        .download-alert {
+            display: none;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 14px;
+            padding: 14px 16px;
             margin-bottom: 20px;
+            text-align: left;
+            animation: fadeIn 0.4s ease-out;
+        }
+        .download-alert.active {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .alert-icon {
+            font-size: 20px;
+            line-height: 1;
+        }
+        .alert-content h4 {
+            font-size: 13px;
+            color: #34d399;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+        .alert-content p {
             font-size: 11.5px;
             color: #cbd5e1;
-            line-height: 1.5;
-            display: none;
+            line-height: 1.4;
         }
-        .release-notes-title {
-            font-weight: 700;
-            color: #fbbf24;
-            margin-bottom: 4px;
-            text-transform: uppercase;
-            font-size: 10px;
-            letter-spacing: 0.5px;
-        }
-        .guide {
-            text-align: left;
-            background: rgba(255, 255, 255, 0.04);
+
+        /* What's New Box */
+        .changelog-box {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 14px;
-            padding: 16px;
+            padding: 14px 16px;
+            margin-bottom: 22px;
+            text-align: left;
+        }
+        .changelog-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+        .changelog-title {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--accent-gold);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .changelog-badge {
+            font-size: 10px;
+            padding: 2px 7px;
+            border-radius: 6px;
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            font-weight: 700;
+        }
+        .changelog-text {
             font-size: 12px;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+
+        /* Feature Pillars Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 14px;
+            padding: 12px 10px;
+            transition: background 0.2s;
+        }
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .feature-icon {
+            font-size: 18px;
+            margin-bottom: 6px;
+        }
+        .feature-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 2px;
+        }
+        .feature-desc {
+            font-size: 9.5px;
             color: #94a3b8;
+            line-height: 1.35;
+        }
+
+        /* Installation Instructions */
+        .install-guide {
+            background: rgba(12, 18, 34, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 18px 18px;
+            text-align: left;
+            margin-bottom: 22px;
+        }
+        .guide-header {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #f8fafc;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .guide-steps {
+            list-style: none;
+            counter-reset: steps;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .guide-steps li {
+            counter-increment: steps;
+            font-size: 11.5px;
+            color: #94a3b8;
+            line-height: 1.5;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .guide-steps li::before {
+            content: counter(steps);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            font-weight: 700;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .guide-steps li b {
+            color: #f1f5f9;
+        }
+
+        /* Security Assurance Badges */
+        .security-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 6px;
+        }
+        .sec-pill {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+        .sec-pill svg {
+            width: 14px;
+            height: 14px;
+            fill: #10b981;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 11.5px;
+            color: #64748b;
             line-height: 1.6;
         }
-        .guide b { color: #f1f5f9; }
-        .guide ol { padding-left: 18px; margin-top: 6px; }
-        .guide li { margin-bottom: 4px; }
+        .footer a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer a:hover {
+            color: var(--accent-gold);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+            .main-card {
+                padding: 28px 20px;
+                border-radius: 24px;
+            }
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            .feature-card {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .feature-icon {
+                margin-bottom: 0;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="card">
-        <div class="icon">
-            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+
+    <!-- Ambient Glowing Backdrops -->
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+
+    <div class="container">
+        <div class="main-card">
+            
+            <!-- School Official Crest / Logo -->
+            <div class="logo-wrap">
+                <div class="logo-glow"></div>
+                <img src="school_logo.png" alt="R.P.S. International School Logo" class="logo-img" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%233b82f6\'><path d=\'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5\'/></svg>'">
+            </div>
+
+            <!-- Header Titles -->
+            <div class="school-title">R.P.S. International School</div>
+            <h1 class="portal-name">Smart RPS Mobile Portal</h1>
+            <p class="portal-sub">Official Android Campus Management & Communication App</p>
+
+            <!-- Live Telemetry Status Bar -->
+            <div class="telemetry-bar">
+                <div class="tele-item">
+                    <div class="tele-label">Status</div>
+                    <div class="tele-val status-online">
+                        <span class="status-dot"></span>
+                        <span id="tele-status">Online</span>
+                    </div>
+                </div>
+                <div class="tele-item">
+                    <div class="tele-label">Version</div>
+                    <div class="tele-val" id="tele-version">v1.1.41</div>
+                </div>
+                <div class="tele-item">
+                    <div class="tele-label">Package Size</div>
+                    <div class="tele-val" id="tele-size">34.9 MB</div>
+                </div>
+            </div>
+
+            <!-- Download Button (Click to Download ONLY - No auto-download) -->
+            <div class="btn-download-wrap">
+                <button type="button" class="btn-download" id="btn-download-action" onclick="handleDownloadClick()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
+                    </svg>
+                    <span id="btn-download-text">Download Official APK</span>
+                </button>
+            </div>
+            <div class="download-hint">Compatible with Android 8.0 and higher • Single Click Install</div>
+
+            <!-- Download Active Animated Alert (Revealed on click) -->
+            <div class="download-alert" id="download-alert">
+                <div class="alert-icon">🚀</div>
+                <div class="alert-content">
+                    <h4>Download Initiated</h4>
+                    <p>Check your browser notification bar. When complete, tap the file to install.</p>
+                </div>
+            </div>
+
+            <!-- What's New Section -->
+            <div class="changelog-box" id="changelog-card">
+                <div class="changelog-header">
+                    <div class="changelog-title">
+                        <span>✨</span> Latest Release Highlights
+                    </div>
+                    <div class="changelog-badge" id="changelog-badge">v1.1.41</div>
+                </div>
+                <div class="changelog-text" id="changelog-content">
+                    • Notice Board detailed view text visibility optimized with light/dark adaptive typography.
+                </div>
+            </div>
+
+            <!-- Campus Portals Overview -->
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎓</div>
+                    <div>
+                        <div class="feature-title">Student Portal</div>
+                        <div class="feature-desc">Attendance, Fee Pos, Homework & Results</div>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👩‍🏫</div>
+                    <div>
+                        <div class="feature-title">Faculty Hub</div>
+                        <div class="feature-desc">Timetable, Class Diary, Marks & Leaves</div>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏛️</div>
+                    <div>
+                        <div class="feature-title">Administration</div>
+                        <div class="feature-desc">Cashflow, Dues, Notices & Biometrics</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visual Step-by-Step Installation Guide -->
+            <div class="install-guide" id="install-guide">
+                <div class="guide-header">
+                    <span>📲</span> Android Quick Installation Steps
+                </div>
+                <ol class="guide-steps">
+                    <li>Tap <b>Download Official APK</b> above to start.</li>
+                    <li>If Google Chrome displays <i>"File might be harmful"</i>, tap <b>Download anyway</b>.</li>
+                    <li>When the download finishes, tap the notification or open <b>Downloads &gt; smart_rps.apk</b>.</li>
+                    <li>Tap <b>Install</b> (enable <i>"Allow from this source"</i> if asked).</li>
+                </ol>
+            </div>
+
+            <!-- Security Trust Badges -->
+            <div class="security-row">
+                <div class="sec-pill">
+                    <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                    <span>Play Protect Safe</span>
+                </div>
+                <div class="sec-pill">
+                    <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                    <span>SSL Encrypted</span>
+                </div>
+                <div class="sec-pill">
+                    <svg viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+                    <span>Auto OTA Sync</span>
+                </div>
+            </div>
+
         </div>
-        <h1>Smart RPS Mobile App</h1>
-        <p class="sub">Official School Portal (Android APK)</p>
 
-        <div class="status-badge" id="status">
-            <span class="status-dot"></span>
-            <span id="status-text">Connecting to cloud server...</span>
-        </div>
-
-        <a href="#" id="dl-btn" class="btn-dl" style="display:none;">Download APK (v1.1.41)</a>
-
-        <div class="release-notes" id="release-notes-container">
-            <div class="release-notes-title">What's New</div>
-            <div id="release-notes-text"></div>
-        </div>
-
-        <div class="guide">
-            <b>Installation Steps:</b>
-            <ol>
-                <li>Tap <b>Download APK</b> if download doesn't start automatically.</li>
-                <li>Tap <b>Download Anyway</b> if prompted by your phone.</li>
-                <li>Open the downloaded APK and tap <b>Install</b>.</li>
-            </ol>
+        <div class="footer">
+            <p>&copy; 2026 <b>R.P.S. International School</b>. All Rights Reserved.</p>
+            <p>Powered by Smart RPS School ERP &bull; <a href="#install-guide">Installation Help</a></p>
         </div>
     </div>
 
     <script>
         const GIST_URL = 'https://gist.githubusercontent.com/Blinders7/2796c813b75aeb01a662670a69e268df/raw?t=' + Date.now();
-        const FALLBACK_URL = 'https://rich-could-created-vii.trycloudflare.com';
-        const DEFAULT_VERSION = '1.1.41';
-        const DEFAULT_SIZE = '34.9 MB';
+        const FALLBACK_TUNNEL = 'https://rich-could-created-vii.trycloudflare.com';
+        
+        let liveDownloadUrl = FALLBACK_TUNNEL + '/download/app.apk';
+        let currentVersion = '1.1.41';
+        let isDownloading = false;
 
-        async function initDownloadPortal() {
-            let activeBaseUrl = FALLBACK_URL;
+        async function fetchServerTelemetry() {
+            let activeUrl = FALLBACK_TUNNEL;
 
+            // 1. Fetch active Cloudflare tunnel from Gist
             try {
-                const gistRes = await fetch(GIST_URL);
-                if (gistRes.ok) {
-                    const txt = (await gistRes.text()).trim();
+                const gistResp = await fetch(GIST_URL);
+                if (gistResp.ok) {
+                    const txt = (await gistResp.text()).trim();
                     if (txt.startsWith('http://') || txt.startsWith('https://')) {
-                        activeBaseUrl = txt;
+                        activeUrl = txt;
                     }
                 }
-            } catch (e) {
-                console.warn('Using fallback tunnel URL:', e);
+            } catch (err) {
+                console.warn('Gist tunnel lookup fallback to:', FALLBACK_TUNNEL);
             }
 
-            const cleanBase = activeBaseUrl.trim().replace(/\/$/, '');
-            let verName = DEFAULT_VERSION;
-            let fileSize = DEFAULT_SIZE;
-            let downloadUrl = cleanBase + '/download/app.apk';
-            let notes = '';
+            const cleanBase = activeUrl.trim().replace(/\/$/, '');
+            liveDownloadUrl = cleanBase + '/download/app.apk';
 
+            // 2. Fetch live Version and File Size
             try {
-                const verRes = await fetch(cleanBase + '/api/app/version', { mode: 'cors' });
-                if (verRes.ok) {
-                    const data = await verRes.json();
-                    if (data.latest_version_name) verName = data.latest_version_name;
-                    if (data.file_size) fileSize = data.file_size;
-                    if (data.download_url) downloadUrl = data.download_url;
-                    if (data.release_notes) notes = data.release_notes;
+                const verResp = await fetch(cleanBase + '/api/app/version', { mode: 'cors' });
+                if (verResp.ok) {
+                    const data = await verResp.json();
+                    if (data.latest_version_name) {
+                        currentVersion = data.latest_version_name;
+                        document.getElementById('tele-version').innerText = `v${currentVersion}`;
+                        document.getElementById('changelog-badge').innerText = `v${currentVersion}`;
+                        document.getElementById('btn-download-text').innerText = `Download APK (v${currentVersion})`;
+                    }
+                    if (data.file_size) {
+                        document.getElementById('tele-size').innerText = data.file_size;
+                    }
+                    if (data.download_url) {
+                        liveDownloadUrl = data.download_url;
+                    }
+                    if (data.release_notes && data.release_notes.trim().length > 0) {
+                        const cleanNotes = data.release_notes.replace(/^[•\s*-]+/gm, '').trim();
+                        document.getElementById('changelog-content').innerText = cleanNotes;
+                    }
                 }
-            } catch (e) {
-                console.warn('Error fetching live version from server API, using defaults:', e);
+            } catch (apiErr) {
+                console.warn('Server API version fallback to v1.1.41:', apiErr);
             }
-
-            // Update Status Badge
-            const statusText = document.getElementById('status-text');
-            statusText.innerHTML = `Server Online (v${verName}) &bull; ${fileSize}`;
-            const statusBadge = document.getElementById('status');
-            statusBadge.style.borderColor = 'rgba(16, 185, 129, 0.4)';
-
-            // Update Download Button
-            const btn = document.getElementById('dl-btn');
-            btn.innerHTML = `Download APK (v${verName})`;
-            btn.href = downloadUrl;
-            btn.style.display = 'block';
-
-            // Show release notes if available
-            if (notes && notes.trim().length > 0) {
-                const notesContainer = document.getElementById('release-notes-container');
-                const notesText = document.getElementById('release-notes-text');
-                notesText.textContent = notes.replace(/^•\s*/, '');
-                notesContainer.style.display = 'block';
-            }
-
-            // Automatically trigger download after brief confirmation
-            setTimeout(() => {
-                window.location.href = downloadUrl;
-            }, 900);
         }
 
-        initDownloadPortal();
+        // NO AUTO-DOWNLOAD ON LOAD OR REFRESH!
+        // Download ONLY runs when the user explicitly clicks the Download button.
+        function handleDownloadClick() {
+            if (isDownloading) return;
+            isDownloading = true;
+
+            const btn = document.getElementById('btn-download-action');
+            const btnText = document.getElementById('btn-download-text');
+            const alertBox = document.getElementById('download-alert');
+
+            // Button feedback
+            btn.classList.add('loading');
+            btnText.innerText = 'Starting Download...';
+
+            // Display active guidance alert
+            alertBox.classList.add('active');
+
+            // Trigger file download
+            const hiddenLink = document.createElement('a');
+            hiddenLink.href = liveDownloadUrl;
+            hiddenLink.setAttribute('download', 'smart_rps.apk');
+            document.body.appendChild(hiddenLink);
+            hiddenLink.click();
+            document.body.removeChild(hiddenLink);
+
+            setTimeout(() => {
+                btnText.innerText = 'Download Started! Check Notifications';
+            }, 1200);
+
+            setTimeout(() => {
+                btn.classList.remove('loading');
+                btnText.innerText = `Download APK (v${currentVersion})`;
+                isDownloading = false;
+            }, 6500);
+        }
+
+        // Initialize Telemetry on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchServerTelemetry();
+        });
     </script>
 </body>
 </html>
