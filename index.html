@@ -6,7 +6,7 @@
     <title>Smart RPS Mobile Portal | R.P.S. International School</title>
     <link rel="icon" type="image/png" href="school_logo.png">
     <meta name="description" content="Official Smart RPS Mobile Application for Students, Teachers and Administration of R.P.S. International School.">
-    <meta name="theme-color" content="#0f172a">
+    <meta name="theme-color" content="#090d16">
 
     <style>
         :root {
@@ -20,6 +20,7 @@
             --text-main: #f8fafc;
             --text-sub: #94a3b8;
             --success: #10b981;
+            --warning: #f59e0b;
         }
 
         * {
@@ -33,9 +34,9 @@
         body {
             background-color: var(--bg-dark);
             background-image: 
-                radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 85% 85%, rgba(124, 58, 237, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 12% 15%, rgba(59, 130, 246, 0.18) 0%, transparent 45%),
+                radial-gradient(circle at 88% 80%, rgba(124, 58, 237, 0.18) 0%, transparent 45%),
+                radial-gradient(circle at 50% 40%, rgba(251, 191, 36, 0.05) 0%, transparent 50%),
                 linear-gradient(180deg, #090d16 0%, #0c1220 100%);
             color: var(--text-main);
             min-height: 100vh;
@@ -43,7 +44,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 32px 16px;
+            padding: 32px 20px;
             position: relative;
             overflow-x: hidden;
         }
@@ -52,57 +53,74 @@
         .ambient-orb {
             position: absolute;
             border-radius: 50%;
-            filter: blur(80px);
+            filter: blur(90px);
             opacity: 0.5;
             pointer-events: none;
             z-index: 0;
-            animation: floatOrb 12s ease-in-out infinite alternate;
+            animation: floatOrb 14s ease-in-out infinite alternate;
         }
         .orb-1 {
-            width: 320px;
-            height: 320px;
-            background: rgba(37, 99, 235, 0.25);
-            top: -60px;
-            left: -60px;
+            width: 380px;
+            height: 380px;
+            background: rgba(37, 99, 235, 0.28);
+            top: -80px;
+            left: -80px;
         }
         .orb-2 {
-            width: 350px;
-            height: 350px;
-            background: rgba(124, 58, 237, 0.22);
-            bottom: -60px;
-            right: -60px;
-            animation-duration: 15s;
+            width: 420px;
+            height: 420px;
+            background: rgba(124, 58, 237, 0.24);
+            bottom: -80px;
+            right: -80px;
+            animation-duration: 18s;
         }
 
         @keyframes floatOrb {
             0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(30px, 40px) scale(1.08); }
-            100% { transform: translate(-20px, 20px) scale(0.95); }
+            50% { transform: translate(40px, 50px) scale(1.1); }
+            100% { transform: translate(-30px, 30px) scale(0.95); }
         }
 
+        /* Auto-resizing Fluid Responsive Container */
         .container {
-            max-width: 480px;
+            max-width: 1160px;
             width: 100%;
+            margin: 0 auto;
             position: relative;
             z-index: 1;
         }
 
-        /* Main Glass Card */
-        .main-card {
+        /* Responsive Grid: Single column on mobile, Two-column on desktop/tablets */
+        .portal-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 28px;
+            width: 100%;
+            align-items: start;
+        }
+
+        @media (min-width: 920px) {
+            .portal-grid {
+                grid-template-columns: 460px 1fr;
+                gap: 32px;
+            }
+        }
+
+        /* Base Glass Card */
+        .glass-card {
             background: var(--card-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--card-border);
             border-radius: 28px;
-            padding: 36px 26px;
-            text-align: center;
-            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 30px rgba(59, 130, 246, 0.12);
+            padding: 36px 28px;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 30px rgba(59, 130, 246, 0.1);
             position: relative;
             overflow: hidden;
         }
 
-        /* Subtle Top Card Accent Bar */
-        .main-card::before {
+        /* Top Accent Rainbow Line */
+        .glass-card::before {
             content: '';
             position: absolute;
             top: 0;
@@ -115,8 +133,8 @@
         /* School Logo Container */
         .logo-wrap {
             position: relative;
-            width: 96px;
-            height: 96px;
+            width: 100px;
+            height: 100px;
             margin: 0 auto 18px;
         }
         .logo-glow {
@@ -124,13 +142,13 @@
             inset: -4px;
             background: linear-gradient(135deg, rgba(251, 191, 36, 0.5), rgba(59, 130, 246, 0.5));
             border-radius: 50%;
-            filter: blur(12px);
-            opacity: 0.75;
+            filter: blur(14px);
+            opacity: 0.8;
             animation: pulseGlow 3s infinite alternate;
         }
         @keyframes pulseGlow {
             0% { opacity: 0.5; transform: scale(0.96); }
-            100% { opacity: 0.9; transform: scale(1.05); }
+            100% { opacity: 0.95; transform: scale(1.06); }
         }
         .logo-img {
             position: relative;
@@ -140,16 +158,16 @@
             border-radius: 50%;
             background: #ffffff;
             padding: 4px;
-            border: 2px solid rgba(255, 255, 255, 0.85);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
             display: block;
         }
 
         /* Typography */
         .school-title {
-            font-size: 13px;
+            font-size: 13.5px;
             font-weight: 800;
-            letter-spacing: 1.8px;
+            letter-spacing: 2px;
             text-transform: uppercase;
             background: var(--gold-gradient);
             -webkit-background-clip: text;
@@ -159,7 +177,7 @@
         }
 
         .portal-name {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 800;
             color: #ffffff;
             letter-spacing: -0.5px;
@@ -169,8 +187,8 @@
         .portal-sub {
             font-size: 13.5px;
             color: var(--text-sub);
-            line-height: 1.45;
-            margin-bottom: 22px;
+            line-height: 1.5;
+            margin-bottom: 24px;
         }
 
         /* Server Telemetry Badge */
@@ -203,7 +221,7 @@
             margin-bottom: 2px;
         }
         .tele-val {
-            font-size: 13px;
+            font-size: 13.5px;
             font-weight: 700;
             color: #f1f5f9;
         }
@@ -211,7 +229,7 @@
             color: var(--success);
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
         }
         .status-dot {
             width: 7px;
@@ -229,7 +247,7 @@
         /* Download Button CTA */
         .btn-download-wrap {
             position: relative;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
         .btn-download {
             display: flex;
@@ -240,25 +258,24 @@
             padding: 18px 24px;
             background: var(--primary-gradient);
             color: #ffffff;
-            font-size: 16.5px;
+            font-size: 17px;
             font-weight: 700;
             text-decoration: none;
             border-radius: 16px;
             border: none;
             cursor: pointer;
-            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.4);
+            box-shadow: 0 12px 32px rgba(37, 99, 235, 0.42);
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
         .btn-download:hover {
             transform: translateY(-2px);
-            box-shadow: 0 18px 36px rgba(37, 99, 235, 0.55);
+            box-shadow: 0 18px 40px rgba(37, 99, 235, 0.6);
         }
         .btn-download:active {
             transform: translateY(1px);
         }
-        /* Button Shimmer Sweep */
         .btn-download::after {
             content: '';
             position: absolute;
@@ -266,12 +283,7 @@
             left: -60%;
             width: 40%;
             height: 200%;
-            background: linear-gradient(
-                60deg,
-                transparent 0%,
-                rgba(255, 255, 255, 0.25) 50%,
-                transparent 100%
-            );
+            background: linear-gradient(60deg, transparent 0%, rgba(255, 255, 255, 0.25) 50%, transparent 100%);
             transform: rotate(25deg);
             animation: shine 4s infinite;
         }
@@ -295,23 +307,24 @@
 
         .btn-download.loading {
             pointer-events: none;
-            opacity: 0.9;
+            opacity: 0.95;
             background: linear-gradient(135deg, #059669 0%, #10b981 100%);
             box-shadow: 0 12px 30px rgba(16, 185, 129, 0.4);
         }
 
         .download-hint {
-            font-size: 11.5px;
+            font-size: 12px;
             color: #64748b;
-            margin-top: -10px;
+            margin-top: -8px;
             margin-bottom: 22px;
+            text-align: center;
         }
 
-        /* Download Active Alert Notification (Appears on click) */
+        /* Download Initiated Banner */
         .download-alert {
             display: none;
-            background: rgba(16, 185, 129, 0.12);
-            border: 1px solid rgba(16, 185, 129, 0.3);
+            background: rgba(16, 185, 129, 0.14);
+            border: 1px solid rgba(16, 185, 129, 0.35);
             border-radius: 14px;
             padding: 14px 16px;
             margin-bottom: 20px;
@@ -328,15 +341,15 @@
             line-height: 1;
         }
         .alert-content h4 {
-            font-size: 13px;
+            font-size: 13.5px;
             color: #34d399;
             font-weight: 700;
             margin-bottom: 2px;
         }
         .alert-content p {
-            font-size: 11.5px;
+            font-size: 12px;
             color: #cbd5e1;
-            line-height: 1.4;
+            line-height: 1.45;
         }
 
         /* What's New Box */
@@ -378,107 +391,20 @@
             line-height: 1.5;
         }
 
-        /* Feature Pillars Grid */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 24px;
-            text-align: left;
-        }
-        .feature-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 14px;
-            padding: 12px 10px;
-            transition: background 0.2s;
-        }
-        .feature-card:hover {
-            background: rgba(255, 255, 255, 0.06);
-        }
-        .feature-icon {
-            font-size: 18px;
-            margin-bottom: 6px;
-        }
-        .feature-title {
-            font-size: 11px;
-            font-weight: 700;
-            color: #f1f5f9;
-            margin-bottom: 2px;
-        }
-        .feature-desc {
-            font-size: 9.5px;
-            color: #94a3b8;
-            line-height: 1.35;
-        }
-
-        /* Installation Instructions */
-        .install-guide {
-            background: rgba(12, 18, 34, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 18px 18px;
-            text-align: left;
-            margin-bottom: 22px;
-        }
-        .guide-header {
-            font-size: 12.5px;
-            font-weight: 700;
-            color: #f8fafc;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .guide-steps {
-            list-style: none;
-            counter-reset: steps;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .guide-steps li {
-            counter-increment: steps;
-            font-size: 11.5px;
-            color: #94a3b8;
-            line-height: 1.5;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-        }
-        .guide-steps li::before {
-            content: counter(steps);
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: rgba(59, 130, 246, 0.2);
-            color: #60a5fa;
-            font-weight: 700;
-            font-size: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            margin-top: 1px;
-        }
-        .guide-steps li b {
-            color: #f1f5f9;
-        }
-
         /* Security Assurance Badges */
         .security-row {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 16px;
-            margin-bottom: 6px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
         }
         .sec-pill {
             display: flex;
             align-items: center;
             gap: 5px;
-            font-size: 11px;
+            font-size: 11.5px;
             color: #94a3b8;
             font-weight: 600;
         }
@@ -488,11 +414,314 @@
             fill: #10b981;
         }
 
+        /* RIGHT COLUMN: DETAILED VISUAL INSTALLATION GUIDE */
+        .guide-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .guide-section-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .guide-badge {
+            background: rgba(251, 191, 36, 0.15);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            color: #fbbf24;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        /* Step Cards */
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .step-card {
+            background: rgba(12, 18, 34, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 18px 20px;
+            transition: border-color 0.25s, transform 0.25s;
+            position: relative;
+        }
+        .step-card:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        .step-badge {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            color: white;
+            font-weight: 800;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+        }
+        .step-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+        .step-desc {
+            font-size: 12.5px;
+            color: var(--text-sub);
+            line-height: 1.55;
+            margin-bottom: 12px;
+            padding-left: 40px;
+        }
+        .step-desc b {
+            color: #f1f5f9;
+        }
+
+        /* VISUAL MOCKUP GRAPHICS */
+        .mockup-box {
+            margin-left: 40px;
+            background: #020617;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 12px 14px;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Mockup 1: Chrome Warning Dialog */
+        .mockup-warning {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 6px 0;
+        }
+        .mockup-warn-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        .mockup-warn-body {
+            flex: 1;
+        }
+        .mockup-warn-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #f8fafc;
+            margin-bottom: 2px;
+        }
+        .mockup-warn-text {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+        .mockup-btn-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+        .mockup-btn-cancel {
+            font-size: 11px;
+            color: #64748b;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        .mockup-btn-confirm {
+            font-size: 11px;
+            background: #2563eb;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 0 12px rgba(37, 99, 235, 0.6);
+            animation: highlightPulse 2s infinite alternate;
+        }
+        @keyframes highlightPulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+
+        /* Mockup 2: Android Notification Banner */
+        .mockup-notif {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 4px 0;
+        }
+        .mockup-notif-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .mockup-notif-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            background: #10b981;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .mockup-notif-file {
+            font-size: 12px;
+            font-weight: 700;
+            color: #f8fafc;
+        }
+        .mockup-notif-sub {
+            font-size: 10.5px;
+            color: #10b981;
+        }
+        .mockup-notif-open {
+            font-size: 11px;
+            font-weight: 700;
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.15);
+            padding: 5px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        /* Mockup 3: Android Permission Switch */
+        .mockup-switch-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4px 0;
+        }
+        .mockup-switch-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .mockup-switch-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+        .mockup-switch-sub {
+            font-size: 10.5px;
+            color: #64748b;
+        }
+        .mockup-toggle-track {
+            width: 44px;
+            height: 24px;
+            background: #10b981;
+            border-radius: 20px;
+            position: relative;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+        }
+        .mockup-toggle-thumb {
+            width: 20px;
+            height: 20px;
+            background: #ffffff;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Mockup 4: Package Installer Dialog */
+        .mockup-installer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4px 0;
+        }
+        .mockup-installer-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .mockup-installer-app {
+            font-size: 12px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+        .mockup-installer-sub {
+            font-size: 10.5px;
+            color: #94a3b8;
+        }
+        .mockup-btn-install {
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.5);
+        }
+
+        /* Campus Portals Overview Bar */
+        .portals-overview {
+            margin-top: 20px;
+            background: rgba(12, 18, 34, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 16px 18px;
+        }
+        .portals-overview-title {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #94a3b8;
+            margin-bottom: 12px;
+        }
+        .portals-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .p-chip {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 11px;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
         /* Footer */
         .footer {
-            margin-top: 24px;
+            margin-top: 32px;
             text-align: center;
-            font-size: 11.5px;
+            font-size: 12px;
             color: #64748b;
             line-height: 1.6;
         }
@@ -506,26 +735,23 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-8px); }
+            from { opacity: 0; transform: translateY(-6px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @media (max-width: 480px) {
-            .main-card {
-                padding: 28px 20px;
-                border-radius: 24px;
+        @media (max-width: 540px) {
+            body {
+                padding: 20px 12px;
             }
-            .features-grid {
-                grid-template-columns: 1fr;
-                gap: 8px;
+            .glass-card {
+                padding: 26px 18px;
+                border-radius: 22px;
             }
-            .feature-card {
-                display: flex;
-                align-items: center;
-                gap: 10px;
+            .portal-name {
+                font-size: 22px;
             }
-            .feature-icon {
-                margin-bottom: 0;
+            .step-desc, .mockup-box {
+                margin-left: 0;
             }
         }
     </style>
@@ -537,130 +763,230 @@
     <div class="ambient-orb orb-2"></div>
 
     <div class="container">
-        <div class="main-card">
+        
+        <div class="portal-grid">
             
-            <!-- School Official Crest / Logo -->
-            <div class="logo-wrap">
-                <div class="logo-glow"></div>
-                <img src="school_logo.png" alt="R.P.S. International School Logo" class="logo-img" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%233b82f6\'><path d=\'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5\'/></svg>'">
-            </div>
+            <!-- LEFT COLUMN: SCHOOL EMBLEM & DOWNLOAD ACTION -->
+            <div class="glass-card" style="text-align: center;">
+                
+                <!-- School Official Crest / Logo -->
+                <div class="logo-wrap">
+                    <div class="logo-glow"></div>
+                    <img src="school_logo.png" alt="R.P.S. International School Logo" class="logo-img" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%233b82f6\'><path d=\'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5\'/></svg>'">
+                </div>
 
-            <!-- Header Titles -->
-            <div class="school-title">R.P.S. International School</div>
-            <h1 class="portal-name">Smart RPS Mobile Portal</h1>
-            <p class="portal-sub">Official Android Campus Management & Communication App</p>
+                <!-- Header Titles -->
+                <div class="school-title">R.P.S. International School</div>
+                <h1 class="portal-name">Smart RPS Mobile Portal</h1>
+                <p class="portal-sub">Unified Official Android ERP for Students, Parents, Faculty & Administration</p>
 
-            <!-- Live Telemetry Status Bar -->
-            <div class="telemetry-bar">
-                <div class="tele-item">
-                    <div class="tele-label">Status</div>
-                    <div class="tele-val status-online">
-                        <span class="status-dot"></span>
-                        <span id="tele-status">Online</span>
+                <!-- Live Telemetry Status Bar -->
+                <div class="telemetry-bar">
+                    <div class="tele-item">
+                        <div class="tele-label">Server Status</div>
+                        <div class="tele-val status-online">
+                            <span class="status-dot"></span>
+                            <span id="tele-status">Online</span>
+                        </div>
+                    </div>
+                    <div class="tele-item">
+                        <div class="tele-label">App Version</div>
+                        <div class="tele-val" id="tele-version">v1.1.41</div>
+                    </div>
+                    <div class="tele-item">
+                        <div class="tele-label">Package Size</div>
+                        <div class="tele-val" id="tele-size">34.9 MB</div>
                     </div>
                 </div>
-                <div class="tele-item">
-                    <div class="tele-label">Version</div>
-                    <div class="tele-val" id="tele-version">v1.1.41</div>
-                </div>
-                <div class="tele-item">
-                    <div class="tele-label">Package Size</div>
-                    <div class="tele-val" id="tele-size">34.9 MB</div>
-                </div>
-            </div>
 
-            <!-- Download Button (Click to Download ONLY - No auto-download) -->
-            <div class="btn-download-wrap">
-                <button type="button" class="btn-download" id="btn-download-action" onclick="handleDownloadClick()">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
-                    </svg>
-                    <span id="btn-download-text">Download Official APK</span>
-                </button>
-            </div>
-            <div class="download-hint">Compatible with Android 8.0 and higher • Single Click Install</div>
-
-            <!-- Download Active Animated Alert (Revealed on click) -->
-            <div class="download-alert" id="download-alert">
-                <div class="alert-icon">🚀</div>
-                <div class="alert-content">
-                    <h4>Download Initiated</h4>
-                    <p>Check your browser notification bar. When complete, tap the file to install.</p>
+                <!-- Download Button (Click to Download ONLY - No auto-download) -->
+                <div class="btn-download-wrap">
+                    <button type="button" class="btn-download" id="btn-download-action" onclick="handleDownloadClick()">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
+                        </svg>
+                        <span id="btn-download-text">Download Official APK</span>
+                    </button>
                 </div>
-            </div>
+                <div class="download-hint">Compatible with Android 8.0 and higher • Single Click Install</div>
 
-            <!-- What's New Section -->
-            <div class="changelog-box" id="changelog-card">
-                <div class="changelog-header">
-                    <div class="changelog-title">
-                        <span>✨</span> Latest Release Highlights
-                    </div>
-                    <div class="changelog-badge" id="changelog-badge">v1.1.41</div>
-                </div>
-                <div class="changelog-text" id="changelog-content">
-                    • Notice Board detailed view text visibility optimized with light/dark adaptive typography.
-                </div>
-            </div>
-
-            <!-- Campus Portals Overview -->
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🎓</div>
-                    <div>
-                        <div class="feature-title">Student Portal</div>
-                        <div class="feature-desc">Attendance, Fee Pos, Homework & Results</div>
+                <!-- Download Active Animated Alert (Revealed on click) -->
+                <div class="download-alert" id="download-alert">
+                    <div class="alert-icon">🚀</div>
+                    <div class="alert-content">
+                        <h4>Download Started</h4>
+                        <p>Check your phone notification tray or browser downloads. Follow the steps on the right to install.</p>
                     </div>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">👩‍🏫</div>
-                    <div>
-                        <div class="feature-title">Faculty Hub</div>
-                        <div class="feature-desc">Timetable, Class Diary, Marks & Leaves</div>
+
+                <!-- What's New Section -->
+                <div class="changelog-box" id="changelog-card">
+                    <div class="changelog-header">
+                        <div class="changelog-title">
+                            <span>✨</span> What's New in v1.1.41
+                        </div>
+                        <div class="changelog-badge" id="changelog-badge">Latest Build</div>
+                    </div>
+                    <div class="changelog-text" id="changelog-content">
+                        • Notice Board detailed view text visibility optimized with light/dark adaptive typography.<br>
+                        • Performance and synchronization improvements across student and staff portals.
                     </div>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🏛️</div>
-                    <div>
-                        <div class="feature-title">Administration</div>
-                        <div class="feature-desc">Cashflow, Dues, Notices & Biometrics</div>
+
+                <!-- Security Trust Badges -->
+                <div class="security-row">
+                    <div class="sec-pill">
+                        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                        <span>Play Protect Safe</span>
+                    </div>
+                    <div class="sec-pill">
+                        <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                        <span>SSL Encrypted</span>
+                    </div>
+                    <div class="sec-pill">
+                        <svg viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+                        <span>In-App Updates</span>
                     </div>
                 </div>
+
             </div>
 
-            <!-- Visual Step-by-Step Installation Guide -->
-            <div class="install-guide" id="install-guide">
-                <div class="guide-header">
-                    <span>📲</span> Android Quick Installation Steps
-                </div>
-                <ol class="guide-steps">
-                    <li>Tap <b>Download Official APK</b> above to start.</li>
-                    <li>If Google Chrome displays <i>"File might be harmful"</i>, tap <b>Download anyway</b>.</li>
-                    <li>When the download finishes, tap the notification or open <b>Downloads &gt; smart_rps.apk</b>.</li>
-                    <li>Tap <b>Install</b> (enable <i>"Allow from this source"</i> if asked).</li>
-                </ol>
-            </div>
 
-            <!-- Security Trust Badges -->
-            <div class="security-row">
-                <div class="sec-pill">
-                    <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
-                    <span>Play Protect Safe</span>
+            <!-- RIGHT COLUMN: DETAILED STEP-BY-STEP VISUAL INSTRUCTIONS -->
+            <div class="glass-card" id="guide-card">
+                
+                <div class="guide-section-header">
+                    <div class="guide-section-title">
+                        <span>📲</span> Android Installation Guide
+                    </div>
+                    <div class="guide-badge">Easy 4-Step Process</div>
                 </div>
-                <div class="sec-pill">
-                    <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
-                    <span>SSL Encrypted</span>
+
+                <div class="steps-container">
+                    
+                    <!-- STEP 1 -->
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-badge">1</div>
+                            <div class="step-name">Tap "Download Official APK" & Confirm</div>
+                        </div>
+                        <p class="step-desc">
+                            Tap the download button on the left. If Google Chrome shows <b>"File might be harmful"</b>, tap <b>Download anyway</b>. This is Google's default security note for all direct APK installations outside Google Play Store.
+                        </p>
+                        
+                        <!-- Visual Illustration 1: Chrome Warning Dialog -->
+                        <div class="mockup-box">
+                            <div class="mockup-warning">
+                                <div class="mockup-warn-icon">⚠️</div>
+                                <div class="mockup-warn-body">
+                                    <div class="mockup-warn-title">File might be harmful</div>
+                                    <div class="mockup-warn-text">Do you want to download smart_rps.apk anyway?</div>
+                                    <div class="mockup-btn-row">
+                                        <span class="mockup-btn-cancel">Cancel</span>
+                                        <span class="mockup-btn-confirm">👉 Download anyway</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2 -->
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-badge">2</div>
+                            <div class="step-name">Open Downloaded File</div>
+                        </div>
+                        <p class="step-desc">
+                            Once the download finishes, swipe down your Android notification shade and tap <b>smart_rps.apk</b>, or find it in your phone's <b>Files / Downloads</b> folder.
+                        </p>
+
+                        <!-- Visual Illustration 2: Notification Shade Card -->
+                        <div class="mockup-box">
+                            <div class="mockup-notif">
+                                <div class="mockup-notif-left">
+                                    <div class="mockup-notif-icon">✓</div>
+                                    <div>
+                                        <div class="mockup-notif-file">smart_rps.apk</div>
+                                        <div class="mockup-notif-sub">Download complete • 34.9 MB</div>
+                                    </div>
+                                </div>
+                                <span class="mockup-notif-open">👉 TAP TO OPEN</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 3 -->
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-badge">3</div>
+                            <div class="step-name">Allow App Installation (If prompted)</div>
+                        </div>
+                        <p class="step-desc">
+                            If Android displays <i>"Your phone is not allowed to install unknown apps"</i>, tap <b>Settings</b> and toggle <b>"Allow from this source"</b> to <b>ON</b>, then press the back button.
+                        </p>
+
+                        <!-- Visual Illustration 3: Android Permission Switch -->
+                        <div class="mockup-box">
+                            <div class="mockup-switch-row">
+                                <div class="mockup-switch-info">
+                                    <span class="mockup-switch-label">Allow from this source</span>
+                                    <span class="mockup-switch-sub">Chrome / File Manager permission</span>
+                                </div>
+                                <div class="mockup-toggle-track">
+                                    <div class="mockup-toggle-thumb"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 4 -->
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-badge">4</div>
+                            <div class="step-name">Tap "Install" & Launch Smart RPS</div>
+                        </div>
+                        <p class="step-desc">
+                            Tap <b>Install</b> on the system prompt. In just a few seconds, the app will be ready. Tap <b>Open</b> and log in with your School Account!
+                        </p>
+
+                        <!-- Visual Illustration 4: Package Installer Prompt -->
+                        <div class="mockup-box">
+                            <div class="mockup-installer">
+                                <div class="mockup-installer-left">
+                                    <img src="school_logo.png" style="width: 26px; height: 26px; border-radius: 6px;" alt="Icon">
+                                    <div>
+                                        <div class="mockup-installer-app">Smart RPS</div>
+                                        <div class="mockup-installer-sub">Do you want to install this application?</div>
+                                    </div>
+                                </div>
+                                <span class="mockup-btn-install">👉 INSTALL</span>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="sec-pill">
-                    <svg viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
-                    <span>Auto OTA Sync</span>
+
+                <!-- Included Portals Chips -->
+                <div class="portals-overview">
+                    <div class="portals-overview-title">Access All School Modules in One App:</div>
+                    <div class="portals-chips">
+                        <div class="p-chip">🎓 Student Portal</div>
+                        <div class="p-chip">👨‍👩‍👦 Parents Console</div>
+                        <div class="p-chip">👩‍🏫 Teacher Tools</div>
+                        <div class="p-chip">🏛️ Administration</div>
+                        <div class="p-chip">📊 Live Fee POS</div>
+                        <div class="p-chip">📢 Notice Board</div>
+                        <div class="p-chip">📋 Timetable & Exams</div>
+                    </div>
                 </div>
+
             </div>
 
         </div>
 
         <div class="footer">
             <p>&copy; 2026 <b>R.P.S. International School</b>. All Rights Reserved.</p>
-            <p>Powered by Smart RPS School ERP &bull; <a href="#install-guide">Installation Help</a></p>
+            <p>Smart RPS Unified School Management & Learning Platform</p>
         </div>
     </div>
 
@@ -744,7 +1070,7 @@
             document.body.removeChild(hiddenLink);
 
             setTimeout(() => {
-                btnText.innerText = 'Download Started! Check Notifications';
+                btnText.innerText = 'Download Started! Follow Steps on Right 👉';
             }, 1200);
 
             setTimeout(() => {
