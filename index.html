@@ -833,7 +833,7 @@
                     </div>
                     <div class="tele-item">
                         <div class="tele-label">Package Size</div>
-                        <div class="tele-val" id="tele-size">34.9 MB</div>
+                        <div class="tele-val" id="tele-size">35.2 MB</div>
                     </div>
                 </div>
 
@@ -847,6 +847,9 @@
                     </button>
                 </div>
                 <div class="download-hint">Compatible with Android 8.0 and higher • Single Click Install</div>
+                <div style="margin-top: 10px; font-size: 11px; color: var(--text-sub); text-align: center;">
+                    Direct Mirrors: <a href="smart_rps.apk" download="smart_rps.apk" style="color: var(--primary); text-decoration: underline; font-weight: 600;">CDN Direct</a> • <a href="https://github.com/Blinders7/smart-rps-download/raw/main/smart_rps.apk" style="color: var(--primary); text-decoration: underline; font-weight: 600;">GitHub Raw Mirror</a>
+                </div>
 
                 <!-- Download Active Animated Alert (Revealed on click) -->
                 <div class="download-alert" id="download-alert">
@@ -866,8 +869,9 @@
                         <div class="changelog-badge" id="changelog-badge">Latest Build</div>
                     </div>
                     <div class="changelog-text" id="changelog-content">
-                        • All fees, revenues, student statistics, and dues formatted in the official Indian Numbering System (₹ Lakhs & Crores).<br>
-                        • Notice Board detailed views with light/dark adaptive contrast and long-press quick deletion.
+                        • Caste Category & Gender Demographics interactive switchable charts and progress breakdown.<br>
+                        • Adaptive Light/Dark mode chart bubble tooltip contrast and performance optimizations.<br>
+                        • All fees, revenues, student statistics, and dues formatted in the official Indian Numbering System (₹ Lakhs & Crores).
                     </div>
                 </div>
 
@@ -1030,55 +1034,59 @@
 
     <script>
         const GIST_URL = 'https://gist.githubusercontent.com/Blinders7/2796c813b75aeb01a662670a69e268df/raw?t=' + Date.now();
-        const FALLBACK_TUNNEL = 'https://rich-could-created-vii.trycloudflare.com';
+        const GITHUB_DIRECT_APK = 'smart_rps.apk';
+        const GITHUB_RAW_APK = 'https://github.com/Blinders7/smart-rps-download/raw/main/smart_rps.apk';
         
-        let liveDownloadUrl = FALLBACK_TUNNEL + '/download/app.apk';
+        let liveDownloadUrl = GITHUB_DIRECT_APK;
         let currentVersion = '1.1.105';
         let isDownloading = false;
 
         async function fetchServerTelemetry() {
-            let activeUrl = FALLBACK_TUNNEL;
+            let activeUrl = null;
 
-            // 1. Fetch active Cloudflare tunnel from Gist
+            // 1. Fetch active Cloudflare tunnel from Gist if available
             try {
                 const gistResp = await fetch(GIST_URL);
                 if (gistResp.ok) {
                     const txt = (await gistResp.text()).trim();
                     if (txt.startsWith('http://') || txt.startsWith('https://')) {
-                        activeUrl = txt;
+                        activeUrl = txt.trim().replace(/\/$/, '');
                     }
                 }
             } catch (err) {
-                console.warn('Gist tunnel lookup fallback to:', FALLBACK_TUNNEL);
+                console.warn('Gist tunnel lookup fallback to direct download:', err);
             }
 
-            const cleanBase = activeUrl.trim().replace(/\/$/, '');
-            liveDownloadUrl = cleanBase + '/download/app.apk';
-
-            // 2. Fetch live Version and File Size
-            try {
-                const verResp = await fetch(cleanBase + '/api/app/version', { mode: 'cors' });
-                if (verResp.ok) {
-                    const data = await verResp.json();
-                    if (data.latest_version_name) {
-                        currentVersion = data.latest_version_name;
-                        document.getElementById('tele-version').innerText = `v${currentVersion}`;
-                        document.getElementById('changelog-badge').innerText = `v${currentVersion}`;
-                        document.getElementById('btn-download-text').innerText = `Download APK (v${currentVersion})`;
+            // 2. ONLY if tunnel exists, verify if server is ACTUALLY responding
+            if (activeUrl) {
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 3500);
+                    const verResp = await fetch(activeUrl + '/api/app/version', { mode: 'cors', signal: controller.signal });
+                    clearTimeout(timeoutId);
+                    if (verResp.ok) {
+                        const data = await verResp.json();
+                        if (data.latest_version_name) {
+                            currentVersion = data.latest_version_name;
+                            document.getElementById('tele-version').innerText = `v${currentVersion}`;
+                            document.getElementById('changelog-badge').innerText = `v${currentVersion}`;
+                            document.getElementById('btn-download-text').innerText = `Download APK (v${currentVersion})`;
+                        }
+                        if (data.file_size) {
+                            document.getElementById('tele-size').innerText = data.file_size;
+                        }
+                        if (data.download_url && (data.download_url.startsWith('http://') || data.download_url.startsWith('https://'))) {
+                            liveDownloadUrl = data.download_url;
+                        }
+                        if (data.release_notes && data.release_notes.trim().length > 0) {
+                            const cleanNotes = data.release_notes.replace(/^[•\s*-]+/gm, '').trim();
+                            document.getElementById('changelog-content').innerText = cleanNotes;
+                        }
                     }
-                    if (data.file_size) {
-                        document.getElementById('tele-size').innerText = data.file_size;
-                    }
-                    if (data.download_url) {
-                        liveDownloadUrl = data.download_url;
-                    }
-                    if (data.release_notes && data.release_notes.trim().length > 0) {
-                        const cleanNotes = data.release_notes.replace(/^[•\s*-]+/gm, '').trim();
-                        document.getElementById('changelog-content').innerText = cleanNotes;
-                    }
+                } catch (apiErr) {
+                    console.warn('Live server tunnel not reachable, keeping 100% reliable direct download:', apiErr);
+                    liveDownloadUrl = GITHUB_DIRECT_APK;
                 }
-            } catch (apiErr) {
-                console.warn('Server API version fallback to v1.1.41:', apiErr);
             }
         }
 
